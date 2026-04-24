@@ -3,13 +3,14 @@ from passlib.context import CryptContext
 from jose import jwt
 from datetime import datetime,timedelta
 from fastapi import Request, HTTPException, Depends, Cookie
+import os
 
 from fastapi.security import HTTPBearer
 from jose import JWTError
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-SECRET_KEY = "044448e3e29843c30534c0aff193c3b6a5a7c55e1e43d39f7faf3f3608004898"
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 
 def hash_password(password):

@@ -1,8 +1,13 @@
 from pymongo import MongoClient
+from dotenv import load_dotenv
+import os
 import certifi
 
+
+load_dotenv()
+
 client = MongoClient(
-    "mongodb+srv://ashokkurapati5_db_user:Ashok7093@cluster0.s5ium9e.mongodb.net/?appName=Cluster0",
+    os.getenv("MONGO_URL"),
     tlsCAFile=certifi.where()
 )
 
