@@ -57,30 +57,4 @@ def delete_lead(id: str):
     lead_collection.delete_one({"_id": ObjectId(id)})
     return {"message": "Deleted"}
 
-@router.post("/login")
-def login(response: Response, data: dict = Body(...)):  # ✅ Response first, no default value
-    username = data.get("username")
-    password = data.get("password")
 
-    if username == "admin" and password == "Hytoma@123":
-        token = create_token({
-            "username": username,
-            "role": "admin"
-        })
-        response.set_cookie(
-            key="token",
-            value=token,
-            httponly=True,
-            samesite="none",
-            secure=True,
-            path="/"
-        )
-
-        return {"message": "Login success", "role": "admin"}
-
-    return {"error": "Invalid credentials"}
-
-@router.post("/logout")
-def logout(response: Response):
-    response.delete_cookie("token")
-    return {"message": "Logged out"}

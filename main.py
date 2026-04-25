@@ -11,9 +11,9 @@ app.include_router(dashboard_router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173","https://hytoma-frontend.vercel.app/"],
+    allow_origins=["http://localhost:5173","https://hytoma-frontend.vercel.app"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 

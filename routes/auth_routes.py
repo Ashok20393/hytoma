@@ -20,8 +20,8 @@ def login(response: Response, data: dict = Body(...)):
         key="token",
         value=token,
         httponly=True,
-        samesite="lax",   # ✅ correct for localhost
-        secure=False,
+        samesite="none",   # ✅ correct for localhost
+        secure=True,
         path="/"
     )
     return {"message": "Login success", "role": user["role"]}
