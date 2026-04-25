@@ -71,8 +71,8 @@ def login(response: Response, data: dict = Body(...)):  # ✅ Response first, no
             key="token",
             value=token,
             httponly=True,
-            samesite="lax",
-            secure=False,
+            samesite="none",
+            secure=True,
             path="/"
         )
 
