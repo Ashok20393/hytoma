@@ -4,13 +4,15 @@ from routes.auth_routes import router as auth_router
 from routes.inventory_routes import router as inventory_router
 from routes.dashboard_routes import router as dashboard_router
 from fastapi.middleware.cors import CORSMiddleware
+from routes.complaint_routes import router as complaint_router
+
 app = FastAPI()
 
 app.include_router(auth_router)
 app.include_router(lead_router)
 app.include_router(dashboard_router)
 app.include_router(inventory_router)
-
+app.include_router(complaint_router)
 
 app.add_middleware(
     CORSMiddleware,
