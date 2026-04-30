@@ -32,7 +32,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173","https://hytoma.vercel.app"],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS" , "PATCH"],
     allow_headers=["*"],
 )
 
