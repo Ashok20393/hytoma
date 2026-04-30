@@ -69,3 +69,11 @@ def update_social(id: str, data: dict = Body(...), user=Depends(get_current_user
 def delete_social(id: str, user=Depends(get_current_user)):
     social_collection.delete_one({"_id": ObjectId(id)})
     return {"message": "Enquiry deleted"}
+
+@router.post("/complaints/public")
+def submit_public_complaint(data: dict = Body(...)):
+    data["createdAt"] = datetime.utcnow()
+    data["status"] = "Open"
+    data["source"] = "Customer Form"
+    complaint_collection.insert_one(data)
+    return {"message": "Complaint submitted successfully"}
