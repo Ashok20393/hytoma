@@ -32,19 +32,21 @@ class MovementCreate(BaseModel):
     person: str
     type: str
     date: str
-    quantity: Optional[int] = 1       # ✅ new
+    quantity: Optional[int] = 1       
     out_time: Optional[str] = None
     notes: Optional[str] = ""
+    expected_date: Optional[str] = None
 
 class MovementUpdate(BaseModel):
     status: Optional[str] = None
     return_time: Optional[str] = None
-    product: Optional[str] = None     # ✅ for edit
+    product: Optional[str] = None     
     client: Optional[str] = None
     person: Optional[str] = None
     type: Optional[str] = None
     quantity: Optional[int] = None
     notes: Optional[str] = None
+    expected_date: Optional[str] = None
 
 # ✅ stats and meta BEFORE /{movement_id} to avoid route conflict
 @router.get("/stats/summary")
@@ -78,6 +80,20 @@ def get_stats(
 def get_persons():
     persons = collection.distinct("person")
     return sorted(persons)
+
+@router.get("/pending")
+def get_pending():
+    today = datetime.utcnow().strftime("%Y-%m-%d")
+    docs = list(collection.find({
+        "status": {"$in": ["Out", "Pending"]}
+    }).sort("expected_date", 1))
+    result = [serialize(d) for d in docs]
+    for item in result:
+        if item.get("expected_date") and item["expected_date"] < today:
+            item["overdue"] = True
+        else:
+            item["overdue"] = False
+    return result
 
 @router.get("")
 def get_movements(
@@ -147,3 +163,4 @@ def delete_movement(movement_id: str):
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Movement not found")
     return {"message": "Deleted"}
+
