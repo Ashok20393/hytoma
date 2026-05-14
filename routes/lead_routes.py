@@ -46,10 +46,25 @@ def get_leads(user=Depends(get_current_user)):  # ✅ now uses correct auth from
     return leads
 
 @router.put("/leads/{id}")
-def update_lead(id: str, user=Depends(get_current_user), updated_data: dict = Body(...)):
+def update_lead(
+    id: str,
+    user=Depends(get_current_user),
+    updated_data: dict = Body(...)
+):
     if "_id" in updated_data:
         del updated_data["_id"]
-    lead_collection.update_one({"_id": ObjectId(id)}, {"$set": updated_data})
+
+    # ✅ Auto set payment date when advance paid entered
+    advance_paid = float(updated_data.get("advancePaid", 0))
+
+    if advance_paid > 0:
+        updated_data["paymentDate"] = datetime.utcnow()
+
+    lead_collection.update_one(
+        {"_id": ObjectId(id)},
+        {"$set": updated_data}
+    )
+
     return {"message": "Lead updated"}
 
 @router.delete("/leads/{id}")
